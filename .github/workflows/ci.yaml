@@ -14,24 +14,6 @@ jobs:
       - name: Run helm-docs
         run: .github/helm-docs.sh
 
-  kubeval-chart:
-    runs-on: ubuntu-latest
-    needs:
-      - lint-docs
-    strategy:
-      matrix:
-        k8s:
-          - v1.16.8
-          - v1.17.4
-          - v1.18.8
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Run kubeval
-        env:
-          KUBERNETES_VERSION: ${{ matrix.k8s }}
-        run: .github/kubeval.sh
-
   lint-test:
     runs-on: ubuntu-latest
     steps:
@@ -55,17 +37,21 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          changed=$(ct list-changed)
+          changed=$(ct --config ct.yaml list-changed)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi
 
       - name: Run chart-testing (lint)
-        run: ct lint
+        run: ct --config ct.yaml lint
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.0.0
         if: steps.list-changed.outputs.changed == 'true'
 
+      - name: Install CRDs
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+
       - name: Run chart-testing (install)
-        run: ct install
+        run: ct --config ct.yaml install
