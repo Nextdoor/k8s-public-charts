@@ -1,0 +1,6 @@
+apiVersion: v2
+name: .
+description: Helm Chart that provisions a series of common Prometheus Alerts
+type: application
+version: 0.1.0
+appVersion: 0.1.0

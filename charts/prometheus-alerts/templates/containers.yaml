@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ .Release.Name }}-container-rules
+  annotations:
+    nextdoor.com/chart: {{ .Values.chart_name }}
+    nextdoor.com/source: {{ .Values.chart_source }}
+spec:
+  groups:
+  - name: container-rules
+    rules:
+    - alert: kube_pod_container_terminated
+      annotations:
+        description: {{`Pod {{$labels.pod}} in namespace {{$labels.namespace}} has a container terminated for more than 10 minutes`}}
+        summary: {{`Pod {{$labels.pod}} in namespace {{$labels.namespace}} in error status`}}
+        runbook_url: {{ .Values.runbook_url }}#kube-pod-container-terminated
+      expr: 'kube_pod_container_status_terminated_reason{reason=~"OOMKilled|Error|ContainerCannotRun", namespace="{{ .Release.Namespace }}"} > 0'
+      for: 10m
+      labels:
+        severity: warning
