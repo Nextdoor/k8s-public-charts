@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - prometheus_alerts
     paths:
       - 'charts/**'
 
@@ -20,4 +21,4 @@ jobs:
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@master
         env:
-          CR_TOKEN: '${{ secrets.CR_TOKEN }}'
+          CR_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
