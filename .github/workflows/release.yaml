@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - prometheus_alerts
     paths:
       - 'charts/**'
 

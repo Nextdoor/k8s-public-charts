@@ -7,5 +7,22 @@ chart_name: prometheus-rules
 chart_source: https://github.com/Nextdoor/k8s-public-charts
 runbook_url: https://github.com/Nextdoor/k8s-public-charts/tree/main/charts/prometheus-rules/runbook.md
 
+# Container Alerting Rules
 #
-#
+# These rules are designed to provide very basic but critical monitoring for
+# the health of your containers and pods. More specific alerts can be created
+# by you - but these are some basic ones that apply to your entire namespace
+# and give you the basic health of whatever is running in the namespace.
+container_rules:
+  enabled: true
+
+  # Monitors Pods for Containers that are terminated for specific reasons that
+  # are unexpected - like OOM's.
+  pod_container_terminated:
+    severity: warning
+    threshold: 0
+    for: 10m
+    reasons:
+      - OOMKilled
+      - Error
+      - ContainerCannotRun
