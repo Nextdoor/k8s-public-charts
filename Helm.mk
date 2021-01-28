@@ -64,6 +64,12 @@ deps:
 	helm dependency update .
 
 ###############################################################################
+# Wrapper command that builds an updated README.md for a particular project
+###############################################################################
+docs:
+	docker run --rm --volume "$$(pwd):/helm-docs" -u "$(id -u)" jnorwood/helm-docs:v1.4.0
+
+###############################################################################
 # Shortcut for generating a printed-out template of all the resources that
 # will be created for this target. This is the most useful script for testing
 # helm chart changes and getting the differences from one build to the next.

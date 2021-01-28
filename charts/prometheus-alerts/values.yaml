@@ -12,13 +12,13 @@ chart_source: https://github.com/Nextdoor/k8s-public-charts
 # namespace to route any PrometheusRules that are firing to your particular
 # PagerDuty Routing Key.
 alertManager:
-  # Not enabled by default - flip this to true to enable this resource.
+  # -- Not enabled by default - flip this to true to enable this resource.
   enabled: false
 
-  # Which AlertManager should this config be picked up by?
+  # -- Which AlertManager should this config be picked up by?
   alertmanagerConfig: default
 
-  # The labels by which incoming alerts are grouped together. For example,
+  # -- The labels by which incoming alerts are grouped together. For example,
   # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
   # be batched into a single group.
   #
@@ -33,17 +33,17 @@ alertManager:
   #
   groupBy: [alertname, namespace]
 
-  # How long to initially wait to send a notification for a group of alerts.
+  # -- How long to initially wait to send a notification for a group of alerts.
   # Allows to wait for an inhibiting alert to arrive or collect more initial
   # alerts for the same group. (Usually ~0s to few minutes.)
   groupWait: 30s
 
-  # How long to wait before sending a notification about new alerts that
+  # -- How long to wait before sending a notification about new alerts that
   # are added to a group of alerts for which an initial notification has
   # already been sent. (Usually ~5m or more.)
   groupInterval: 5m
 
-  # How long to wait before sending a notification again if it has already
+  # -- How long to wait before sending a notification again if it has already
   # been sent successfully for an alert. (Usually ~3h or more).
   repeatInterval: 1h
 
@@ -64,10 +64,10 @@ alertManager:
   #   routing_key:
 
 # Defaults applied to all Prometheus Rules
-#
-# ...
 defaults:
+  # -- The prefix URL to the runbook_urls that will be applied to each PrometheusRule
   runbookUrl: https://github.com/Nextdoor/k8s-public-charts/tree/main/charts/prometheus-rules/runbook.md
+  # -- Additional custom labels attached to every PrometheusRule
   additionalRuleLabels: {}
 
 # Container Alerting Rules
@@ -77,6 +77,7 @@ defaults:
 # by you - but these are some basic ones that apply to your entire namespace
 # and give you the basic health of whatever is running in the namespace.
 containerRules:
+  # -- Whether or not to enable the container rules template
   enabled: true
 
   # Monitors Pods for Containers that are terminated for specific reasons that
