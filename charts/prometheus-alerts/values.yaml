@@ -5,7 +5,6 @@
 # uses this as a dependency.
 chart_name: prometheus-rules
 chart_source: https://github.com/Nextdoor/k8s-public-charts
-runbook_url: https://github.com/Nextdoor/k8s-public-charts/tree/main/charts/prometheus-rules/runbook.md
 
 # PagerDuty AlertManager Configuration
 #
@@ -64,18 +63,25 @@ alertManager:
   #   # This is the raw routing_key string - just directly copied in.
   #   routing_key:
 
+# Defaults applied to all Prometheus Rules
+#
+# ...
+defaults:
+  runbookUrl: https://github.com/Nextdoor/k8s-public-charts/tree/main/charts/prometheus-rules/runbook.md
+  additionalRuleLabels: {}
+
 # Container Alerting Rules
 #
 # These rules are designed to provide very basic but critical monitoring for
 # the health of your containers and pods. More specific alerts can be created
 # by you - but these are some basic ones that apply to your entire namespace
 # and give you the basic health of whatever is running in the namespace.
-container_rules:
+containerRules:
   enabled: true
 
   # Monitors Pods for Containers that are terminated for specific reasons that
   # are unexpected - like OOM's.
-  pod_container_terminated:
+  PodContainerTerminated:
     severity: warning
     threshold: 0
     for: 10m
@@ -83,3 +89,78 @@ container_rules:
       - OOMKilled
       - Error
       - ContainerCannotRun
+
+  # Pod is crash looping
+  KubePodCrashLooping:
+    severity: warning
+    for: 15m
+
+  # Pod has been in a non-ready state for more than a specific threshold
+  KubePodNotReady:
+    severity: warning
+    for: 15m
+
+  # Deployment generation mismatch due to possible roll-back
+  KubeDeploymentGenerationMismatch:
+    severity: warning
+    for: 15m
+
+  # Deployment has not matched the expected number of replicas
+  KubeDeploymentReplicasMismatch:
+    severity: warning
+    for: 15m
+
+  # Deployment has not matched the expected number of replicas
+  KubeStatefulSetReplicasMismatch:
+    severity: warning
+    for: 15m
+
+  # StatefulSet generation mismatch due to possible roll-back
+  KubeStatefulSetGenerationMismatch:
+    severity: warning
+    for: 15m
+
+  # StatefulSet update has not been rolled out
+  KubeStatefulSetUpdateNotRolledOut:
+    severity: warning
+    for: 15m
+
+  # DaemonSet rollout is stuck
+  KubeDaemonSetRolloutStuck:
+    severity: warning
+    for: 15m
+
+  # Pod container waiting longer than threshold
+  KubeContainerWaiting:
+    severity: warning
+    for: 1h
+
+  # DaemonSet pods are not scheduled
+  KubeDaemonSetNotScheduled:
+    severity: warning
+    for: 10m
+
+  # DaemonSet pods are misscheduled
+  KubeDaemonSetMisScheduled:
+    severity: warning
+    for: 15m
+
+  # Job did not complete in time
+  KubeJobCompletion:
+    severity: warning
+    for: 12h
+
+  # Job failed to complete
+  KubeJobFailed:
+    severity: warning
+    for: 15m
+
+  # HPA has not matched descired number of replicas
+  KubeHpaReplicasMismatch:
+    severity: warning
+    for: 15m
+
+  # HPA is running at max replicas
+  KubeHpaMaxedOut:
+    severity: warning
+    for: 15m
