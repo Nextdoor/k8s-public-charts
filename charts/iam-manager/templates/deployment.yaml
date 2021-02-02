@@ -6,9 +6,7 @@ metadata:
   labels:
     {{- include "iam-manager.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "iam-manager.selectorLabels" . | nindent 6 }}
