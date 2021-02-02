@@ -70,7 +70,7 @@ webhook:
   # -- Enables the ValidatingWebhookConfiguration which will prevent Iamrole
   # -- resources from being created if they are not reasonably valid.
   # -- **Note**: Requires that the cert-manager is installed
-  enabled: true
+  enabled: false
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
