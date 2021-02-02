@@ -48,6 +48,7 @@ Selector labels
 {{- define "iam-manager.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "iam-manager.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+control-plane: controller-manager
 {{- end }}
 
 {{/*

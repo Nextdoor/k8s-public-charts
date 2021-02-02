@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "iam-manager.fullname" . }}
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "iam-manager.labels" . | nindent 4 }}
 spec:
@@ -33,20 +34,47 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /manager
+          args:
+            - --enable-leader-election
+            {{- range $arg := .Values.extraArgs }}
+            - {{ $arg }}
+            {{- end }}
           ports:
-            - name: http
-              containerPort: 80
+            - name: metrics
+              containerPort: 8443
               protocol: TCP
+            {{- if .Values.webhook.enabled }}
+            - name: webhook-server
+              containerPort: 9443
+              protocol: TCP
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /
-              port: http
+              port: metrics
+              scheme: HTTPS
           readinessProbe:
             httpGet:
               path: /
-              port: http
+              port: metrics
+              scheme: HTTPS
+          volumeMounts:
+          {{- if .Values.webhook.enabled }}
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        {{- if .Values.webhook.enabled }}
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: {{ include "iam-manager.fullname" . }}-webhook-server-cert
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iam-manager.fullname" . }}-metrics-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    control-plane: controller-manager
+    {{- include "iam-manager.labels" . | nindent 4 }}
+  annotations:
+    prometheus.io/port: "8443"
+    prometheus.io/scheme: https
+    prometheus.io/scrape: "true"
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: 8443
+      targetPort: metrics-service
+      protocol: TCP
+      name: metrics-service
+  selector:
+    {{- include "iam-manager.selectorLabels" . | nindent 4 }}

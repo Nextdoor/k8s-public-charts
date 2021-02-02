@@ -1,28 +1,52 @@
 # Default values for iam-manager.
+#
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# -- The number of iam-manager pods to run.
 replicaCount: 1
 
+# -- Do not change, this is a hard-coded value because the iam-manager codebase
+# -- currently hard-codes this to iam-manager-system.
+# -- https://github.com/keikoproj/iam-manager/blob/v0.0.6/internal/config/constants.go#L9
+namespace: iam-manager-system
+
+config:
+  # -- Do not change, this is a hard-coded value because the iam-manager codebase
+  # -- currently hard-codes this to "iam-manager-iamroles-v1alpha1-configmap"
+  # -- https://github.com/keikoproj/iam-manager/blob/v0.0.6/internal/config/constants.go#L12
+  name: iam-manager-iamroles-v1alpha1-configmap
+  data: {}
+
 image:
-  repository: nginx
+  # -- Overrides the Docker image repository source
+  repository: keikoproj/iam-manager
+  # -- Sets the imagePullPolicy on the deployment
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+# -- Extra arguments to pass into the iam-manager pod
+extraArgs: []
+
+# -- imagePullSecrets if you are using a private docker repository
 imagePullSecrets: []
+
+# -- Overrides the short name of the resources
 nameOverride: ""
+# -- Overrides the fully defined name of the resources
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  # -- Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
+  # -- Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
+  # -- The name of the service account to use.
+  # -- If not set and create is true, a name is generated using the fullname template
   name: ""
 
+# -- Annotations added to the individual Pods
 podAnnotations: {}
 
 podSecurityContext: {}
@@ -38,20 +62,15 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 443
+  targetPort: webhook-server
+  portName: https
 
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths: []
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+webhook:
+  # -- Enables the ValidatingWebhookConfiguration which will prevent Iamrole
+  # -- resources from being created if they are not reasonably valid.
+  # -- **Note**: Requires that the cert-manager is installed
+  enabled: true
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -64,13 +83,6 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
 
