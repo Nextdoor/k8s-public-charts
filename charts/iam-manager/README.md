@@ -4,6 +4,12 @@
 
 Installs the Keiko Project IAM Manager
 
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| diranged | matt@nextdoor.com |  |
+
 ## Source Code
 
 * <https://github.com/keikoproj/iam-manager>
