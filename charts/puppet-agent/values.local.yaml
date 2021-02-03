@@ -1,0 +1,7 @@
+extraArgs:
+  - --noop
+  - --verbose
+  - --debug
+
+tolerations:
+  - operator: Exists

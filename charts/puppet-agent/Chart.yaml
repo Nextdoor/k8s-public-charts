@@ -1,0 +1,10 @@
+apiVersion: v2
+name: puppet-agent
+description: Run Puppet as a Daemonset in Kubernetes
+type: application
+version: 0.1.0
+# https://hub.docker.com/r/puppet/puppet-agent-alpine/tags?page=2&ordering=last_updated
+appVersion: 5.5.1
+maintainers:
+  - name: diranged
+    email: matt@nextdoor.com

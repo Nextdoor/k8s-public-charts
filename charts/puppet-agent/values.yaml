@@ -1,0 +1,62 @@
+image:
+  repository: puppet/puppet-agent-alpine
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Grants the pod host-level networking
+hostNetwork: true
+
+# -- Creates a PodSecurityPolicy for the DaemonSet
+pspEnabled: true
+
+# -- Runs the pod within the same IPC space as the host itself
+hostIPC: true
+
+# -- Runs the pod within the same PID space as the host itself
+hostPID: true
+
+# -- Optional extra arguments to pass to the 'puppet agent' command.
+extraArgs: []
+
+# -- Optional image pull secrets if you are using a private registry
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # -- If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations added to the pods themselves
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext:
+  privileged: true
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
