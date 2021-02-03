@@ -1,0 +1,23 @@
+{{- if .Values.webhook.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "iam-manager.fullname" . }}-webhook-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    control-plane: controller-manager
+    {{- include "iam-manager.labels" . | nindent 4 }}
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: {{ .Values.service.portName }}
+  selector:
+    {{- include "iam-manager.selectorLabels" . | nindent 4 }}
+{{- end }}

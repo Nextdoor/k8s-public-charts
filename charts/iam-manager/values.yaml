@@ -1,0 +1,91 @@
+# Default values for iam-manager.
+#
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- The number of iam-manager pods to run.
+replicaCount: 1
+
+# -- Do not change, this is a hard-coded value because the iam-manager codebase
+# -- currently hard-codes this to iam-manager-system.
+# -- https://github.com/keikoproj/iam-manager/blob/v0.0.6/internal/config/constants.go#L9
+namespace: iam-manager-system
+
+config:
+  # -- Do not change, this is a hard-coded value because the iam-manager codebase
+  # -- currently hard-codes this to "iam-manager-iamroles-v1alpha1-configmap"
+  # -- https://github.com/keikoproj/iam-manager/blob/v0.0.6/internal/config/constants.go#L12
+  name: iam-manager-iamroles-v1alpha1-configmap
+  data: {}
+
+image:
+  # -- Overrides the Docker image repository source
+  repository: keikoproj/iam-manager
+  # -- Sets the imagePullPolicy on the deployment
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Extra arguments to pass into the iam-manager pod
+extraArgs: []
+
+# -- imagePullSecrets if you are using a private docker repository
+imagePullSecrets: []
+
+# -- Overrides the short name of the resources
+nameOverride: ""
+# -- Overrides the fully defined name of the resources
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # -- If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations added to the individual Pods
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 443
+  targetPort: webhook-server
+  portName: https
+
+webhook:
+  # -- Enables the ValidatingWebhookConfiguration which will prevent Iamrole
+  # -- resources from being created if they are not reasonably valid.
+  # -- **Note**: Requires that the cert-manager is installed
+  enabled: false
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

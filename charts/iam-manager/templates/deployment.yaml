@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "iam-manager.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "iam-manager.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "iam-manager.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "iam-manager.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "iam-manager.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - /manager
+          args:
+            - --enable-leader-election
+            {{- range $arg := .Values.extraArgs }}
+            - {{ $arg }}
+            {{- end }}
+          ports:
+            - name: metrics
+              containerPort: 8443
+              protocol: TCP
+            {{- if .Values.webhook.enabled }}
+            - name: webhook-server
+              containerPort: 9443
+              protocol: TCP
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+              scheme: HTTPS
+          volumeMounts:
+          {{- if .Values.webhook.enabled }}
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        {{- if .Values.webhook.enabled }}
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: {{ include "iam-manager.fullname" . }}-webhook-server-cert
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
