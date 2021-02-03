@@ -1,0 +1,123 @@
+image:
+  # -- The repository where t
+  repository: puppet/puppet-agent-alpine
+  pullPolicy: IfNotPresent
+  # -- Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+# -- Optional image pull secrets if you are using a private registry
+imagePullSecrets: []
+
+# -- Grants the pod host-level networking
+hostNetwork: true
+
+# -- Creates a PodSecurityPolicy for the DaemonSet
+pspEnabled: true
+
+# -- Runs the pod within the same IPC space as the host itself
+hostIPC: true
+
+# -- Runs the pod within the same PID space as the host itself
+hostPID: true
+
+# -- The list of volumeMounts that are applied the puppet agent container.
+# This dictates how much control and access the agent has to the underlying
+# host. The default setup is very widely scoped.
+volumeMounts:
+  - mountPath: /tmp
+    name: tmp
+  - mountPath: /etc
+    name: etc
+  - mountPath: /var
+    name: var
+  - mountPath: /usr
+    name: usr
+  - mountPath: /lib64
+    name: lib64
+  - mountPath: /mnt
+    name: mnt
+  - mountPath: /opt
+    name: opt
+  - mountPath: /root
+    name: root
+  - mountPath: /home
+    name: home
+
+# -- The list of volumes that are available to the puppet agent container to
+# mount through the `.Values.volumeMounts` parameter.
+volumes:
+  - hostPath:
+      path: /tmp
+    name: tmp
+  - hostPath:
+      path: /etc
+    name: etc
+  - hostPath:
+      path: /var
+    name: var
+  - hostPath:
+      path: /usr
+    name: usr
+  - hostPath:
+      path: /lib64
+    name: lib64
+  - hostPath:
+      path: /mnt
+    name: mnt
+  - hostPath:
+      path: /opt
+    name: opt
+  - hostPath:
+      path: /root
+    name: root
+  - hostPath:
+      path: /home
+    name: home
+
+# -- Optional extra arguments to pass to the 'puppet agent' command.
+extraArgs: []
+
+# -- Optionally adds a "name" identifier to the end of the resources created
+# by this chart.
+nameOverride: ""
+
+# -- Optionally fully override the entire name of the chart
+fullnameOverride: ""
+
+serviceAccount:
+  # -- Specifies whether a service account should be created
+  create: true
+  # -- Annotations to add to the service account
+  annotations: {}
+  # -- The name of the service account to use.
+  # -- If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Annotations added to the pods themselves
+podAnnotations: {}
+
+# -- Custmizes the podSecurityContext
+podSecurityContext: {}
+  # fsGroup: 2000
+
+# -- Customizes the securityContext spec for the agent container in the pod
+securityContext:
+  privileged: true
+
+# -- Pod resource customization
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# -- Use a nodeSelector to narrow down the scope of where you want to run the
+# Puppet agent processes.
+nodeSelector: {}
+
+# -- The default toleration grants this Pod access to run on every host
+# regardless of its Taints.
+tolerations:
+  - operator: Exists
