@@ -3,5 +3,4 @@ extraArgs:
   - --verbose
   - --debug
 
-tolerations:
-  - operator: Exists
+nameOverride: foo
