@@ -40,4 +40,18 @@ entries:
     urls:
     - https://github.com/Nextdoor/k8s-public-charts/releases/download/prometheus-alerts-0.0.1/prometheus-alerts-0.0.1.tgz
     version: 0.0.1
+  puppet-agent:
+  - apiVersion: v2
+    appVersion: 5.5.1
+    created: "2021-02-03T18:53:39.485297136Z"
+    description: Run Puppet as a Daemonset in Kubernetes
+    digest: 8ae96e45ee10a7eeb99063604f411413a0265f520f3767e8b81879a803b47f22
+    maintainers:
+    - email: matt@nextdoor.com
+      name: diranged
+    name: puppet-agent
+    type: application
+    urls:
+    - https://github.com/Nextdoor/k8s-public-charts/releases/download/puppet-agent-0.1.0/puppet-agent-0.1.0.tgz
+    version: 0.1.0
 generated: "2021-01-16T21:28:49.298940934Z"
