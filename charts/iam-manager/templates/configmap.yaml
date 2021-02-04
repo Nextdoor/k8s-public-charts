@@ -8,5 +8,6 @@ metadata:
 data:
   {{- $global := . }}
   {{- range $k, $v := .Values.config.data }}
-  {{ $k }}: "{{ tpl $v $global }}"
+  {{ $k }}: |-
+    {{- tpl $v $global | nindent 4 }}
   {{- end }}
