@@ -10,6 +10,7 @@ spec:
   commonName: {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}
   dnsNames:
   - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}
+  - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}.svc
   - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}.svc.cluster.local
   issuerRef:
     kind: Issuer

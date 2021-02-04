@@ -12,10 +12,13 @@ spec:
       {{- include "iam-manager.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/certificate: {{ include (print $.Template.BasePath "/certificate.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
+
       labels:
         {{- include "iam-manager.selectorLabels" . | nindent 8 }}
     spec:
