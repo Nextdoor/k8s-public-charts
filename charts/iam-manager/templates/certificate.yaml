@@ -7,10 +7,10 @@ metadata:
   labels:
     {{- include "iam-manager.labels" . | nindent 4 }}
 spec:
-  commonName: {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Release.Namespace }}
+  commonName: {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}
   dnsNames:
-  - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Release.Namespace }}
-  - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Release.Namespace }}.svc.cluster.local
+  - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}
+  - {{ include "iam-manager.fullname" . }}-webhook-service.{{ .Values.namespace }}.svc.cluster.local
   issuerRef:
     kind: Issuer
     name: iam-manager-selfsigned-issuer
