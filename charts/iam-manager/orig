@@ -1,0 +1,361 @@
+Pulling dependencies in...
+helm dependency update .
+helm template --debug --values values.yaml --values values.local.yaml --namespace default iam-manager .
+---
+# Source: iam-manager/templates/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+  name: iam-manager-system
+---
+# Source: iam-manager/templates/networkpolicy.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: iam-manager-webhook-ingress
+  namespace: iam-manager-system
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: iam-manager
+      app.kubernetes.io/instance: iam-manager
+      control-plane: controller-manager
+  policyTypes: [Ingress]
+  ingress:
+    - ports:
+        - port: 9443
+          protocol: TCP
+---
+# Source: iam-manager/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: iam-manager
+  namespace: iam-manager-system
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: iam-manager/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: iam-manager-iamroles-v1alpha1-configmap
+  namespace: iam-manager-system
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+data:
+---
+# Source: iam-manager/templates/manager-role-clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: iam-manager-manager-role
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - iammanager.keikoproj.io
+  resources:
+  - iamroles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - iammanager.keikoproj.io
+  resources:
+  - iamroles/status
+  verbs:
+  - get
+  - patch
+  - update
+---
+# Source: iam-manager/templates/proxy-role-clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: iam-manager-proxy-role
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+---
+# Source: iam-manager/templates/manager-role-clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: iam-manager-manager-rolebinding
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: iam-manager-manager-role
+subjects:
+- kind: ServiceAccount
+  name: iam-manager
+  namespace: default
+---
+# Source: iam-manager/templates/proxy-role-clusterrolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: iam-manager-proxy-rolebinding
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: iam-manager-proxy-role
+subjects:
+- kind: ServiceAccount
+  name: iam-manager
+  namespace: default
+---
+# Source: iam-manager/templates/leader-election-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: iam-manager-leader-election
+  namespace: iam-manager-system
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - configmaps/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+---
+# Source: iam-manager/templates/leader-election-rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: iam-manager-leader-election-rolebinding
+  namespace: iam-manager-system
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: iam-manager-leader-election
+subjects:
+- kind: ServiceAccount
+  name: iam-manager
+  namespace: iam-manager-system
+---
+# Source: iam-manager/templates/metrics-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: iam-manager-metrics-service
+  namespace: iam-manager-system
+  labels:
+    control-plane: controller-manager
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    prometheus.io/port: "8443"
+    prometheus.io/scheme: https
+    prometheus.io/scrape: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8443
+      targetPort: metrics-service
+      protocol: TCP
+      name: metrics-service
+  selector:
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+---
+# Source: iam-manager/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iam-manager
+  namespace: iam-manager-system
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: iam-manager
+      app.kubernetes.io/instance: iam-manager
+      control-plane: controller-manager
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: iam-manager
+        app.kubernetes.io/instance: iam-manager
+        control-plane: controller-manager
+    spec:
+      serviceAccountName: iam-manager
+      securityContext:
+        {}
+      containers:
+        - name: iam-manager
+          securityContext:
+            {}
+          image: "keikoproj/iam-manager:v0.0.6"
+          imagePullPolicy: IfNotPresent
+          command:
+            - /manager
+          args:
+            - --enable-leader-election
+          ports:
+            - name: metrics
+              containerPort: 8443
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+              scheme: HTTPS
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+              scheme: HTTPS
+          volumeMounts:
+          resources:
+            {}
+      volumes:
+---
+# Source: iam-manager/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "iam-manager-test-connection"
+  labels:
+    helm.sh/chart: iam-manager-0.1.3
+    app.kubernetes.io/name: iam-manager
+    app.kubernetes.io/instance: iam-manager
+    control-plane: controller-manager
+    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['iam-manager:443']
+  restartPolicy: Never

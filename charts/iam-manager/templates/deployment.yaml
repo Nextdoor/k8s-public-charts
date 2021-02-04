@@ -36,12 +36,13 @@ spec:
             - /manager
           args:
             - --enable-leader-election
+            - --metrics-addr=8080
             {{- range $arg := .Values.extraArgs }}
             - {{ $arg }}
             {{- end }}
           ports:
             - name: metrics
-              containerPort: 8443
+              containerPort: 8080
               protocol: TCP
             {{- if .Values.webhook.enabled }}
             - name: webhook-server
@@ -52,12 +53,12 @@ spec:
             httpGet:
               path: /
               port: metrics
-              scheme: HTTPS
+              scheme: HTTP
           readinessProbe:
             httpGet:
               path: /
               port: metrics
-              scheme: HTTPS
+              scheme: HTTP
           volumeMounts:
           {{- if .Values.webhook.enabled }}
             - mountPath: /tmp/k8s-webhook-server/serving-certs

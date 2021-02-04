@@ -2,7 +2,7 @@ apiVersion: v2
 name: iam-manager
 description: Installs the Keiko Project IAM Manager
 type: application
-version: 0.1.4
+version: 0.1.5
 appVersion: "v0.0.6"
 sources:
   - https://github.com/keikoproj/iam-manager
