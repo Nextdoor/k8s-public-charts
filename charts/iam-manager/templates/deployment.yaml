@@ -51,12 +51,12 @@ spec:
             {{- end }}
           livenessProbe:
             httpGet:
-              path: /
+              path: /metrics
               port: metrics
               scheme: HTTP
           readinessProbe:
             httpGet:
-              path: /
+              path: /metrics
               port: metrics
               scheme: HTTP
           volumeMounts:
