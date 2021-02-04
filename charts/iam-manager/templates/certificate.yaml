@@ -2,7 +2,7 @@
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
 metadata:
-  name: {{ include "iam-manager.fullname" . }}-servingcert
+  name: {{ include "iam-manager.fullname" . }}-serving-cert
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "iam-manager.labels" . | nindent 4 }}
