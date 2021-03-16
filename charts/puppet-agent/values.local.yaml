@@ -1,6 +1,0 @@
-extraArgs:
-  - --noop
-  - --verbose
-  - --debug
-
-nameOverride: foo
