@@ -64,6 +64,9 @@ Helm Chart that provisions a series of common Prometheus Alerts
 | namespaceRules.KubeQuotaAlmostFull.for | string | `"10m"` |  |
 | namespaceRules.KubeQuotaAlmostFull.severity | string | `"warning"` |  |
 | namespaceRules.KubeQuotaAlmostFull.threshold | int | `90` |  |
+| namespaceRules.KubeQuotaFullyUsed.for | string | `"10m"` |  |
+| namespaceRules.KubeQuotaFullyUsed.severity | string | `"critical"` |  |
+| namespaceRules.KubeQuotaFullyUsed.threshold | int | `99` |  |
 | namespaceRules.enabled | bool | `true` | Whether or not to enable the namespace rules template |
 
 ----------------------------------------------

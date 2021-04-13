@@ -23,3 +23,9 @@ can inspect any quotas or limits placed on your `Namespace` like this:
      ----       --------  ---  ---   ---------------  -------------  -----------------------
      Container  cpu       -    8     0                0              -
      Container  memory    -    16Gi  128Mi            128Mi          -
+
+## KubeQuotaFullyUsed
+
+Similar to the `KubeQuotaAlmostFull` alert - but you are now out of resources.
+At this point you cannot launch or scale any new resources until you reduce
+your usage, or work with an administrator to expand your `Quota` capacity.

@@ -38,4 +38,24 @@ spec:
         {{- end }}
     {{- end }}
 
+    {{- with .Values.namespaceRules.KubeQuotaFullyUsed }}
+    - alert: KubeQuotaFullyUsed
+      annotations:
+        summary: Namespace quota is fully used.
+        description:  >-
+          {{`Namespace {{ $labels.namespace }} is using {{ $value }} of its {{ $labels.resource }} quota.`}}
+        runbook_url: {{ $values.defaults.runbookUrl }}#KubeQuotaFullyUsed
+      expr: |-
+        (
+          kube_resourcequota{job="kube-state-metrics", type="used"}
+            / ignoring(instance, job, type)
+          (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+        ) * 100 >= {{ .threshold }}
+      for: {{ .for }}
+      labels:
+        severity: {{ .severity }}
+        {{- if $values.defaults.additionalRuleLabels }}
+        {{ toYaml $values.defaults.additionalRuleLabels | nindent 8 }}
+        {{- end }}
+    {{- end }}
 {{- end }}

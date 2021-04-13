@@ -181,3 +181,9 @@ namespaceRules:
     severity: warning
     threshold: 90
     for: 10m
+
+  # Similar to above - but with a higher threshold and a higher severity.
+  KubeQuotaFullyUsed:
+    severity: critical
+    threshold: 99
+    for: 10m
