@@ -3,6 +3,21 @@ entries:
   iam-manager:
   - apiVersion: v2
     appVersion: v0.0.6
+    created: "2021-04-13T19:26:03.56859332Z"
+    description: Installs the Keiko Project IAM Manager
+    digest: 5a1742b12988dafd7f48d3be978e37c014bb8061d970b31240f6476939e4a44d
+    maintainers:
+    - email: matt@nextdoor.com
+      name: diranged
+    name: iam-manager
+    sources:
+    - https://github.com/keikoproj/iam-manager
+    type: application
+    urls:
+    - https://github.com/Nextdoor/k8s-public-charts/releases/download/iam-manager-0.1.11/iam-manager-0.1.11.tgz
+    version: 0.1.11
+  - apiVersion: v2
+    appVersion: v0.0.6
     created: "2021-02-04T06:47:17.932234768Z"
     description: Installs the Keiko Project IAM Manager
     digest: 8b93e9da92af4d425498b012cf75b91ff87caa439ab28ee52c185cee35306245
@@ -167,6 +182,19 @@ entries:
     - https://github.com/Nextdoor/k8s-public-charts/releases/download/iam-manager-0.1.0/iam-manager-0.1.0.tgz
     version: 0.1.0
   prometheus-alerts:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2021-04-13T19:26:03.867050056Z"
+    description: Helm Chart that provisions a series of common Prometheus Alerts
+    digest: 92e77c18eeab0ce4920b27959bf77e38ec17a112ab62c63c9d374d65c28b7c35
+    maintainers:
+    - email: matt@nextdoor.com
+      name: diranged
+    name: prometheus-alerts
+    type: application
+    urls:
+    - https://github.com/Nextdoor/k8s-public-charts/releases/download/prometheus-alerts-0.1.1/prometheus-alerts-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2021-01-28T23:29:23.723051302Z"
