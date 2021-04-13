@@ -26,9 +26,9 @@ spec:
           {{`Namespace {{ $labels.namespace }} is using {{ $value }} of its {{ $labels.resource }} quota. `}}
       expr: |-
         (
-          kube_resourcequota{job="kube-state-metrics", type="used", namespace="{{ $targetNamespace }}"}
+          kube_resourcequota{job="kube-state-metrics", type="used", namespace=~"{{ $targetNamespace }}"}
             / ignoring(instance, job, type)
-          (kube_resourcequota{job="kube-state-metrics", type="hard", namespace="{{ $targetNamespace }}"} > 0)
+          (kube_resourcequota{job="kube-state-metrics", type="hard", namespace=~"{{ $targetNamespace }}"} > 0)
         ) * 100 > {{ .threshold }} < 100
       for: {{ .for }}
       labels:
@@ -47,9 +47,9 @@ spec:
         runbook_url: {{ $values.defaults.runbookUrl }}#KubeQuotaFullyUsed
       expr: |-
         (
-          kube_resourcequota{job="kube-state-metrics", type="used"}
+          kube_resourcequota{job="kube-state-metrics", type="used", namespace=~"{{ $targetNamespace }}"}
             / ignoring(instance, job, type)
-          (kube_resourcequota{job="kube-state-metrics", type="hard"} > 0)
+          (kube_resourcequota{job="kube-state-metrics", type="hard", namespace=~"{{ $targetNamespace }}"} > 0)
         ) * 100 >= {{ .threshold }}
       for: {{ .for }}
       labels:

@@ -22,6 +22,9 @@ Helm Chart that provisions a series of common Prometheus Alerts
 | alertManager.repeatInterval | string | `"1h"` | How long to wait before sending a notification again if it has already been sent successfully for an alert. (Usually ~3h or more). |
 | chart_name | string | `"prometheus-rules"` |  |
 | chart_source | string | `"https://github.com/Nextdoor/k8s-public-charts"` |  |
+| containerRules.CPUThrottlingHigh.for | string | `"15m"` |  |
+| containerRules.CPUThrottlingHigh.severity | string | `"warning"` |  |
+| containerRules.CPUThrottlingHigh.threshold | int | `65` |  |
 | containerRules.KubeContainerWaiting.for | string | `"1h"` |  |
 | containerRules.KubeContainerWaiting.severity | string | `"warning"` |  |
 | containerRules.KubeDaemonSetMisScheduled.for | string | `"15m"` |  |

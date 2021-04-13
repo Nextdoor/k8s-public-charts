@@ -1,3 +1,39 @@
+## CPUThrottlingHigh
+
+This alert fires if any particular container is experiencing throttling by the
+Linux CFS system. This typically means that your container is operating close
+to its Kubernetes `resource.limits` configuration. You can quickly look at the
+utilization of the individual containers within a given pod or namespace like
+this:
+
+    $ k top pods --containers
+    POD                                      NAME               CPU(cores)   MEMORY(bytes)   
+    datadog-agent-2qk9w                      agent              22m          65Mi            
+    datadog-agent-2qk9w                      process-agent      10m          35Mi            
+    datadog-agent-2qk9w                      system-probe       6m           34Mi            
+    datadog-agent-2qk9w                      trace-agent        2m           27Mi            
+
+You can compare the actual used CPU and Memory values with the pod through the
+`kubectl describe pod <pod>` command:
+
+    $ k describe pod datadog-agent-2qk9w
+    Name:                 datadog-agent-2qk9w
+    Namespace:            datadog-operator
+    ...
+    Containers:
+      agent:
+      ...
+        Limits:
+          cpu:     25m
+          memory:  256Mi
+        Requests:
+          cpu:      10m
+          memory:   96Mi
+
+In the example above, you can see that the `agent` has a CPU Limit of `25m`,
+but its running at `22m`... so its pretty close to its actual limits. It's
+resource limits should likely be adjusted.
+
 ## KubeQuotaAlmostFull
 
 This alert telling you that the resources requested by all of the `Pods` in

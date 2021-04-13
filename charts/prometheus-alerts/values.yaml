@@ -166,6 +166,11 @@ containerRules:
     severity: warning
     for: 15m
 
+  CPUThrottlingHigh:
+    severity: warning
+    threshold: 65
+    for: 15m
+
 # Namespace Alerting Rules
 #
 # These rules provide some basic alerting around namespace limits that may
