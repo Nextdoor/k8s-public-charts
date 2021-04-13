@@ -66,7 +66,7 @@ alertManager:
 # Defaults applied to all Prometheus Rules
 defaults:
   # -- The prefix URL to the runbook_urls that will be applied to each PrometheusRule
-  runbookUrl: https://github.com/Nextdoor/k8s-public-charts/tree/main/charts/prometheus-rules/runbook.md
+  runbookUrl: https://github.com/Nextdoor/k8s-public-charts/blob/main/charts/prometheus-alerts/runbook.md
   # -- Additional custom labels attached to every PrometheusRule
   additionalRuleLabels: {}
 

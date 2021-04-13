@@ -1,6 +1,6 @@
 # prometheus-alerts
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.0.1](https://img.shields.io/badge/AppVersion-0.0.1-informational?style=flat-square)
 
 Helm Chart that provisions a series of common Prometheus Alerts
 
@@ -63,7 +63,7 @@ Helm Chart that provisions a series of common Prometheus Alerts
 | containerRules.PodContainerTerminated.threshold | int | `0` |  |
 | containerRules.enabled | bool | `true` | Whether or not to enable the container rules template |
 | defaults.additionalRuleLabels | object | `{}` | Additional custom labels attached to every PrometheusRule |
-| defaults.runbookUrl | string | `"https://github.com/Nextdoor/k8s-public-charts/tree/main/charts/prometheus-rules/runbook.md"` | The prefix URL to the runbook_urls that will be applied to each PrometheusRule |
+| defaults.runbookUrl | string | `"https://github.com/Nextdoor/k8s-public-charts/blob/main/charts/prometheus-alerts/runbook.md"` | The prefix URL to the runbook_urls that will be applied to each PrometheusRule |
 | namespaceRules.KubeQuotaAlmostFull.for | string | `"10m"` |  |
 | namespaceRules.KubeQuotaAlmostFull.severity | string | `"warning"` |  |
 | namespaceRules.KubeQuotaAlmostFull.threshold | int | `90` |  |
