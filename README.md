@@ -13,7 +13,7 @@ is public.
     $ helm repo update
     $ helm search repo nextdoor
     NAME                      	CHART VERSION	APP VERSION	DESCRIPTION
-    nextdoor/prometheus-alerts	0.0.1        	0.0.1      	Helm Chart that provisions a series of common P...
+    nextdoor/iam-manager	0.1.11        	0.0.6      	Installs the Keiko Project IAM Manager
 
 ## Charts
 
