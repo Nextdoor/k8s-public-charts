@@ -1,2 +1,8 @@
+# Don't actually run the service. This is because it tries to log into AWS and
+# talk to IAM on startup, and then crashes. There is no real way to test this,
+# so instead we are just testing that the rest of the chart (CRDs, templates,
+# etc) can apply properly.
+replicaCount: 0
+
 webhook:
   enabled: true
