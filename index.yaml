@@ -3,6 +3,21 @@ entries:
   iam-manager:
   - apiVersion: v2
     appVersion: v0.0.6
+    created: "2022-05-12T16:47:11.690512849Z"
+    description: Installs the Keiko Project IAM Manager
+    digest: 347c2e918c863b4f449922bc691477437d8742d1a5fa258366d0fffb42e81c69
+    maintainers:
+    - email: matt@nextdoor.com
+      name: diranged
+    name: iam-manager
+    sources:
+    - https://github.com/keikoproj/iam-manager
+    type: application
+    urls:
+    - https://github.com/Nextdoor/k8s-public-charts/releases/download/iam-manager-0.3.2/iam-manager-0.3.2.tgz
+    version: 0.3.2
+  - apiVersion: v2
+    appVersion: v0.0.6
     created: "2022-05-11T21:57:48.347054322Z"
     description: Installs the Keiko Project IAM Manager
     digest: dcabeb59862a25c2390b798096bb8a63e0bb0a2ebc6e25cb8514b07e80b37c4b
