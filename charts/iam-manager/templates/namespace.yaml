@@ -3,4 +3,6 @@ kind: Namespace
 metadata:
   labels:
     {{- include "iam-manager.labels" . | nindent 4 }}
+    pod-security.kubernetes.io/enforced: baseline
+    pod-security.kubernetes.io/warn: baseline
   name: {{ .Values.namespace }}
